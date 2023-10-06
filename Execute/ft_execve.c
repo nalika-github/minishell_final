@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:10:26 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 05:44:39 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 05:58:51 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,37 +63,7 @@ void	ft_prtcmd(t_list *tb_lst, int i)
 
 }
 
-// void	ft_parent(t_list *tb_lst,int *fd_tmp_read, int nbr_cmd , t_dict *dict)
-void	ft_parent(t_list *tb_lst,int *fd_tmp_read, int nbr_cmd , char **env)
-{
-	t_table	*table;
-	t_data exec_data;
 
-	// dprintf(2, "Hello from parent\n");
-	table = (t_table *)(tb_lst->data);
-	// ft_prtcmd(tb_lst, table->i);
-	exec_data = (t_data )(table->exec_data);
-	// dprintf(2, "tmp_read : %d\n" , *fd_tmp_read);
-	if (nbr_cmd > 1)
-	{
-		close(table->fd_pipe[0]);
-		close(table->fd_pipe[1]);
-	}
-
-	// if (exec_data.fd_in != 0)
-	// 	close(exec_data.fd_in);
-	// if (exec_data.fd_out != 1)
-	// 	close(exec_data.fd_out);
-
-	// ft_buildin_parent(table->cmd, env);
-	// if (data_exec.pid != 0) // espectialy parent
-	// dprintf(2, "c1\n");
-	// ft_waitpid(tb_lst);
-	// export
-	// cd
-	// unset
-	// exit
-}
 
 void ft_close_pipe(t_minishell *ms, t_list *tb_lst)
 {
@@ -107,31 +77,7 @@ void ft_close_pipe(t_minishell *ms, t_list *tb_lst)
 	}
 }
 
-void	branch_child(t_minishell  *ms, t_list *tb_lst, int *fd_read)
-{
-	char **cmd;
-	t_table	*table;
-	t_data	*exec_data;
-	char	**path;
 
-	// check unset path
-	table = (t_table *)(tb_lst->data);
-	exec_data = (t_data *)(&(table->exec_data));
-	path = ft_findpath(ms->env); // fixed from env to t_dict *dict
-	// dprintf(2, "i_branch_child[%d] : %s\n", exec_data->i, table->cmd[0]);
-	// dprintf(2, "nbr_branch_child : %d\n", ms->nbr_cmd_all);
-	// ft_prtcmd(tb_lst, table->i);
-	ft_getfd(tb_lst);
-	if (exec_data->fd_in == -1)
-		return ;
-	ft_dup2(exec_data->i, tb_lst, fd_read, ms->nbr_cmd_all);
-	ft_close_pipe(ms, ms->tb_lst);
-	if (ft_findchar(table->cmd[0], '/') == EXIT_SUCCESS) // cmd or av4
-		ft_execvepath(table->cmd, ms->env);
-	else
-		ft_execvecmd(table->cmd, path, ms->env);
-
-}
 
 /* void	ft_child(t_list *tb_lst, int nbr_cmd, t_dict *dict, int *fd_tmp_read)
 {

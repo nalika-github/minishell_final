@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:46:22 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/04 02:07:53 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 06:30:05 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,37 +54,33 @@ int	ft_getfd_in(t_list *tb_lst)
 			return(-1);
 		if (rdr->type == INFILE)
 			fd_in = open(rdr->file, O_RDONLY);
+		rdr_lst = rdr_lst->next;
+	}
+	return (fd_in);
+}
+int	ft_getfd_heredoc(t_list *tb_lst)
+{
+	int		fd_in;
+	int		i;
+	t_table *table;
+	t_rdr	*rdr;
+	t_list	*rdr_lst;
+
+	i = 0;
+	table = (t_table *)(tb_lst->data);
+	rdr_lst = (t_list *)(table->rdr);
+	while (rdr_lst)
+	{
+		rdr = (t_rdr *)(rdr_lst->data);
+		if (ft_accessfile(rdr->file, rdr->type) == EXIT_FAILURE)
+			return(-1);
+		if (rdr->type == INFILE)
+			fd_in = open(rdr->file, O_RDONLY);
 		else if (rdr->type == HEREDOC)
 			fd_in = table->fd_heredoc;
 		rdr_lst = rdr_lst->next;
 	}
 	return (fd_in);
-
-
-
-	// while (tb_lst)
-	// {
-	// 	table = (t_table *)(tb_lst->data);
-	// 	while (table->rdr)
-	// 	{
-	// 		// dprintf(2, "ft_getfd_in\n");
-	// 		rdr_lst = (t_rdr *)(table->rdr->data);
-	// 		if (ft_accessfile(rdr_lst->file, rdr_lst->type) == EXIT_FAILURE)
-	// 		{
-	// 			// dprintf(2, "exit_fdin\n");
-	// 			return(-1);
-	// 		}
-	// 		if (rdr_lst->type == INFILE)
-	// 			fd_in = open(rdr_lst->file, O_RDONLY);
-	// 		else if (rdr_lst->type == HEREDOC)
-	// 			fd_in = table->fd_heredoc;
-	// 		table->rdr = table->rdr->next;
-	// 	}
-	// 	tb_lst = tb_lst->next;
-	// }
-	// dprintf(2, "fd_here_getfd_in : %d\n", fd_in);
-	// exit(0);
-	// return (fd_in);
 }
 
 int	ft_getfd_out(t_list *tb_lst)
@@ -128,11 +124,15 @@ void	ft_getfd(t_list *tb_lst)
 
 	table = (t_table *)(tb_lst->data);
 	exec_data =  &table->exec_data;
+	
 	nbr_infile = ft_cnt_infile(tb_lst);
 	if (nbr_infile == 0 && table->nbr_heredoc == 0) // no infile
 		exec_data->fd_in = STDIN_FILENO;
-	else
+	else if (nbr_infile == 0 && table->nbr_heredoc != 0)
+		exec_data->fd_in = ft_getfd_heredoc(tb_lst);
+	else // It have both
 		exec_data->fd_in = ft_getfd_in(tb_lst);
+
 	nbr_outfile = ft_cnt_outfile(tb_lst);
 	if (nbr_outfile == 0) // no outfile
 		exec_data->fd_out = STDOUT_FILENO;

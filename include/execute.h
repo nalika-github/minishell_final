@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 00:33:50 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 05:35:06 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 06:12:45 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_list t_list;
 typedef struct s_minishell t_minishell;
 
 void	ft_initdata(t_minishell *ms, char **env);
+
+void branch_parent(t_minishell *ms, t_list *tb_lst, int *fd_read);
 
 void	ft_mainexec(t_minishell *ms);
 char	**ft_findpath(char **env);
@@ -46,7 +48,7 @@ void	ft_countexec(t_list *tb_lst);
 
 /*ft_check_name*/
 int	ft_checkfile(t_list *tb_lst);
-
+void ft_dup2(t_list *tb_lst, int *fd_tmp_read, int nbr_cmd);
 /*ft_execve*/
 void	ft_execvecmd(char **cmd, char **path, char **tmp_env);
 void	ft_execvepath(char **path, char **tmp_env);
@@ -56,7 +58,7 @@ void	branch_child(t_minishell  *ms, t_list *tb_lst, int *fd_tmp_read);
 // void	ft_child(t_list *tb_lst, int nbr_cmd, t_dict *dict, int *fd_tmp_read);
 // void	ft_parent(t_list *tb_lst,int *fd_tmp_read, int nbr_cmd , t_dict *dict);
 /*ft_execute*/
-void ft_dup2(int i, t_list *tb_lst, int *fd_tmp_read, int nbr_cmd);
+// void ft_dup2(int i, t_list *tb_lst, int *fd_tmp_read, int nbr_cmdd);
 int		ft_check_builtin(char **cmd);
 // void	ft_waitpid(t_list *tb_lst_cpy);
 void ft_waitpid(t_minishell *ms, t_list *tb_lst_cpy);

@@ -6,14 +6,14 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:26:45 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 05:45:10 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 06:32:19 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /*close fd after dup */
-void ft_dup2(int i, t_list *tb_lst, int *fd_tmp_read, int nbr_cmd)
+void ft_dup2(t_list *tb_lst, int *fd_tmp_read, int nbr_cmd)
 {
 	t_table *table;
 	t_data *exec_data;
@@ -23,7 +23,7 @@ void ft_dup2(int i, t_list *tb_lst, int *fd_tmp_read, int nbr_cmd)
 	// dprintf(2, "i_dup2 : %d\n", i);
 	// dprintf(2, "nbr_cmd_dup2 : %d\n", nbr_cmd);
 
-	if (i == 0 && nbr_cmd == 1) // for 1 cmd
+	if (exec_data->i == 0 && nbr_cmd == 1) // for 1 cmd
 	{
 		// dprintf(2, "fd_in_dup2 : %d\n" , exec_data->fd_in);
 		// dprintf(2, "fd_here_dup2 : %d\n" , table->fd_heredoc );
@@ -36,19 +36,21 @@ void ft_dup2(int i, t_list *tb_lst, int *fd_tmp_read, int nbr_cmd)
 		if (exec_data->fd_out != STDOUT_FILENO)
 			close(exec_data->fd_out);
 	}
-	else if (i != nbr_cmd - 1 ) // start with  > 1 cmd
+	else if (exec_data->i != nbr_cmd - 1 ) // start with  > 1 cmd
 	{
 		dprintf(2, "dup 1 cmd\n");
 		dup2(exec_data->fd_in, STDIN_FILENO);
 		dup2(table->fd_pipe[1], STDOUT_FILENO);
 	}
-	else if (i == nbr_cmd - 1) // end
+	else if (exec_data->i == nbr_cmd - 1) // end
 	{
 		dprintf(2, "last cmd\n");
 		// printf("fd_out : %d\n", exec_data->fd_out);
 		exec_data->fd_out = STDOUT_FILENO; // for test
 		dup2(*fd_tmp_read, STDIN_FILENO);
 		dup2(exec_data->fd_out, STDOUT_FILENO);
+		if (exec_data->fd_out != STDOUT_FILENO)
+			close(exec_data->fd_out);
 	}
 	else // btw
 	{
@@ -155,7 +157,8 @@ void ft_execute(t_minishell *ms, t_list *tb_lst)
 			branch_child(ms, tb_lst, &fd_read);
 			// ft_child(tb_lst, ms->nbr_cmd_all, ms->env, &fd_tmp_read);
 		if (ms->pid[data_exec->i] > 0)
-			ft_parent(tb_lst, &fd_read, ms->nbr_cmd_all, ms->env);
+			branch_parent(ms, tb_lst, &fd_read);
+			// ft_parent(tb_lst, &fd_read, ms->nbr_cmd_all, ms->env);
 		// if (data_exec->pid == 0 && ft_check_buildin(table->cmd) == EXIT_FAILURE)
 		// 	ft_child(tb_lst, nbr_cmd, dict, &fd_tmp_read);
 		// if (data_exec->pid > 0)
