@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 17:25:43 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/04 02:21:31 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 04:50:52 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_prtdict(t_dict	*dict)
 		dict = dict -> next;
 		i++;
 	}
-	dprintf(2, "i : %d\n", i);
+	// dprintf(2, "i : %d\n", i);
 }
 
 void	ft_prtexport(t_dict	*dict)

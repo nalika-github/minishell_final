@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:33:47 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 01:38:31 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/04 02:07:36 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,10 @@ int	ft_cnt_infile(t_list *table_list)
 	while (rdr_lst)
 	{
 		rdr = (t_rdr *)(rdr_lst->data);
-		// ft_prt_type(rdr->type);
 		if (rdr->type == INFILE)
 			i++;
 		rdr_lst = rdr_lst->next;
 	}
-	// dprintf(2, "Finish_cnt_infile\n");
 	return (i);
 }
 
@@ -92,11 +90,9 @@ int	ft_cnt_outfile(t_list *table_list)
 	while (rdr_lst)
 	{
 		rdr = (t_rdr *)(rdr_lst->data);
-		// ft_prt_type(rdr->type);
 		if (rdr->type == OUTFILE || rdr->type == APPEND)
 			i++;
 		rdr_lst = rdr_lst->next;
 	}
-	// dprintf(2, "Finish_cnt_infile\n");
 	return (i);
 }

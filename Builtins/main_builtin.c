@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 02:58:16 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 01:49:16 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/01 17:00:08 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,30 +58,21 @@ int	ft_findstr(char *str, char *find, int len)
 // 	// 	ft_pwd();
 // }
 
-void	ft_child_builtin(t_minishell *ms, t_list *tb_lst)
-{
-	t_table	*table;
-	// t_data	*exec_data;
+// void	ft_buildin_child(char **cmd, char  **env, int fd_out)
+// {
+// 	// dprintf(2, "ft_buildin_child\n");
+// 	// printf("cmd : %s\n", cmd[0]);
+// 	if (ft_strcmp(cmd[0], "pwd") == 0)
+// 		ft_pwd();
+// 	else if (ft_strcmp(cmd[0], "echo") == 0)
+// 		ft_echo(cmd, fd_out);
+// 	else if (ft_strcmp(cmd[0], "export") == 0)
+// 		ft_export(cmd, env);
+// 	// else if (ft_strcmp(cmd[0], "env") == 0)
+// 	// 	ft_env(data);
 
-	table = (t_table *)(tb_lst->data);
-	// exec_data = (t_data *)(&(table->exec_data));
-	ft_getfd(ms, tb_lst);
-	if (table->fd_in == -1)
-		return ;
-	ft_dup2(ms, tb_lst);
-	ft_close_pipe(ms, tb_lst);
-	if (table->exec_status == 1)
-	{
-		if ((ft_strcmp(table->cmd[0], "export") == 0) && !table->cmd[1])
-			ft_export(table->cmd,  ms->dict);
-		if (ft_strcmp(table->cmd[0], "echo") == 0)
-			ft_echo(table->cmd , table->fd_out);
-		if (ft_strcmp(table->cmd[0], "pwd") == 0)
-			ft_pwd();
-		if (ft_strcmp(table->cmd[0], "env") == 0)
-			ft_env(ms->dict);
-	}
-}
+// 	// exit(0);
+// }
 
 // void	ft_buildin(char **av, t_data *data, char **env)
 // {

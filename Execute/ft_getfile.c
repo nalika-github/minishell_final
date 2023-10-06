@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:46:22 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 02:43:10 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/04 02:07:53 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,91 +118,26 @@ int	ft_getfd_out(t_list *tb_lst)
 	return (fd_out);
 }
 
-// /* /* don't fotget check name of file */
-// void	ft_getfd(t_list *tb_lst)
-// {
-// 	int		nbr_infile;
-// 	int		nbr_outfile;
-// 	t_table	*table;
-// 	t_data	*exec_data;
-
-// 	table = (t_table *)(tb_lst->data);
-// 	exec_data =  &table->exec_data;
-// 	nbr_infile = ft_cnt_infile(tb_lst);
-// 	if (nbr_infile == 0 && table->nbr_heredoc == 0) // no infile
-// 		exec_data->fd_in = STDIN_FILENO;
-// 	else
-// 		exec_data->fd_in = ft_getfd_in(tb_lst);
-// 	nbr_outfile = ft_cnt_outfile(tb_lst);
-// 	if (nbr_outfile == 0) // no outfile
-// 		exec_data->fd_out = STDOUT_FILENO;
-// 	else
-// 		exec_data->fd_out = ft_getfd_out(tb_lst);
-// 	// dprintf(2 , "fd_in_getfd__ :  %d\n", exec_data->fd_in);
-// 	// dprintf(2 , "fd_out_getfd__ :  %d\n", exec_data->fd_out);
-// } */
-
-
 /* don't fotget check name of file */
-void	ft_getfd(t_minishell *ms, t_list *tb_lst)
+void	ft_getfd(t_list *tb_lst)
 {
-	(void)ms;
-	(void)tb_lst;
+	int		nbr_infile;
+	int		nbr_outfile;
 	t_table	*table;
+	t_data	*exec_data;
 
 	table = (t_table *)(tb_lst->data);
-	table->nbr_infile = ft_cnt_infile(tb_lst);
-	table->nbr_outfile = ft_cnt_outfile(tb_lst);
-	// dprintf(2, "nbr_infile : %d\n", table->nbr_infile);
-	// dprintf(2, "nbr_outfile : %d\n", table->nbr_outfile);
-	dprintf(2, "fd_tmp : %d\n", table->fd_tmp);
-	// exit(0);
-	/*get fd_in*/
-	if (table->nbr_infile)
-	{
-		dprintf(2, "ft_getfdin_1\n");
-		table->fd_in = ft_getfd_in(tb_lst);
-	}
-	// else if (table->i > 0 && table->i != ms->nbr_cmd_all)
-	else if (table->i != 0)
-	{
-		dprintf(2, "ft_getfdin_3\n");
-		// table->fd_in = table->fd_pipe[0];
-		table->fd_in = table->fd_tmp;
-	}
-	// else if (table->nbr_infile == 0 && table->i == 0)
-	// {
-	// 	dprintf(2, "ft_getfdin_2\n");
-	// 	table->fd_in = STDIN_FILENO;
-	// }
-
-	/*get fd_out*/
-	if (table->nbr_outfile) // no outfile
-	{
-		dprintf(2, "ft_getfdout_1\n");
-		table->fd_out = ft_getfd_out(tb_lst);
-	}
-	else if (table->i == ms->nbr_cmd_all - 1 && table->nbr_outfile == 0)
-	{
-		dprintf(2, "ft_getfdout_3\n");
-		table->fd_out = STDOUT_FILENO;
-	}
-	else if (table->i != ms->nbr_cmd_all - 1 && ms->nbr_cmd_all > 1)
-	{
-		dprintf(2, "ft_getfdout_2\n");
-		table->fd_out = table->fd_pipe[1];
-	}
-
-	// table->nbr_infile = ft_cnt_infile(tb_lst);
-	// if (table->nbr_infile || table->nbr_heredoc) // no infile
-	// 	table->fd_in = ft_getfd_in(tb_lst);
-	// else if (table->i != 0)
-	// 	table->fd_in = table->fd_tmp;
-	// table->nbr_outfile = ft_cnt_outfile(tb_lst);
-	// if (table->nbr_outfile) // no outfile
-	// 	table->fd_out = ft_getfd_out(tb_lst);
-	// else if (table->i != ms->nbr_cmd_all - 1 && ms->nbr_cmd_all > 1)
-	// 	table->fd_out = table->fd_pipe[1];
-	dprintf(2 , "[%d] nbr_outfile:  %d fd_in_getfd__ :  %d\n", table->i, table->nbr_infile, table->fd_in);
-	dprintf(2 , "[%d] nbr_outfile:  %d fd_out_getfd__ :  %d\n", table->i, table->nbr_outfile, table->fd_out);
+	exec_data =  &table->exec_data;
+	nbr_infile = ft_cnt_infile(tb_lst);
+	if (nbr_infile == 0 && table->nbr_heredoc == 0) // no infile
+		exec_data->fd_in = STDIN_FILENO;
+	else
+		exec_data->fd_in = ft_getfd_in(tb_lst);
+	nbr_outfile = ft_cnt_outfile(tb_lst);
+	if (nbr_outfile == 0) // no outfile
+		exec_data->fd_out = STDOUT_FILENO;
+	else
+		exec_data->fd_out = ft_getfd_out(tb_lst);
+	// dprintf(2 , "fd_in_getfd__ :  %d\n", exec_data->fd_in);
+	// dprintf(2 , "fd_out_getfd__ :  %d\n", exec_data->fd_out);
 }
