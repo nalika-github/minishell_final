@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 05:48:56 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 06:21:43 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 13:07:24 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ void	ft_child_builtin(t_minishell *ms, t_list *tb_lst, int *fd_read)
 		return ;
 	ft_dup2(tb_lst, fd_read, ms->nbr_cmd_all);
 	ft_close_pipe(ms, tb_lst);
-	if (table->exec_status == 1)
+	// dprintf(2, "fd_out : %d\n", exec_data->fd_out);
+	if (table->exec_status == BUI_CHILD)
 	{
+		dprintf(2, "ft_child_builtin\n");
 		if ((ft_strcmp(table->cmd[0], "export") == 0) && table->cmd[1] == NULL)
 			ft_export(table->cmd,  ms->dict);
 		if (ft_strcmp(table->cmd[0], "echo") == 0)

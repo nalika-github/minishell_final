@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:26:45 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 06:32:19 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 13:01:48 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,20 @@ void ft_dup2(t_list *tb_lst, int *fd_tmp_read, int nbr_cmd)
 
 	table = (t_table *)(tb_lst->data);
 	exec_data = (t_data *)(&(table->exec_data));
-	// dprintf(2, "i_dup2 : %d\n", i);
+	// dprintf(2, "i_dup2 : %d\n", exec_data->i);
 	// dprintf(2, "nbr_cmd_dup2 : %d\n", nbr_cmd);
 
 	if (exec_data->i == 0 && nbr_cmd == 1) // for 1 cmd
 	{
-		// dprintf(2, "fd_in_dup2 : %d\n" , exec_data->fd_in);
+		// dprintf(2, "dup for 1 cmd\n");
+		// dprintf(2, "fd_in_dup2_bf : %d\n" , exec_data->fd_in);
 		// dprintf(2, "fd_here_dup2 : %d\n" , table->fd_heredoc );
-		// dprintf(2, "fd_out_dup2 : %d\n", exec_data->fd_out);
+		// dprintf(2, "fd_out_dup2_bf : %d\n", exec_data->fd_out);
 		dup2(exec_data->fd_in, STDIN_FILENO);
 		dup2(exec_data->fd_out, STDOUT_FILENO);
+		// dprintf(2, "fd_in_dup2_at : %d\n" , exec_data->fd_in);
+		// dprintf(2, "fd_here_dup2 : %d\n" , table->fd_heredoc );
+		// dprintf(2, "fd_out_dup2_at : %d\n", exec_data->fd_out);
 		// dprintf(exec_data->fd_out, "finish_dup\n");
 		if (exec_data->fd_in != STDIN_FILENO)
 			close(exec_data->fd_in);
@@ -159,14 +163,12 @@ void ft_execute(t_minishell *ms, t_list *tb_lst)
 		if (ms->pid[data_exec->i] > 0)
 			branch_parent(ms, tb_lst, &fd_read);
 			// ft_parent(tb_lst, &fd_read, ms->nbr_cmd_all, ms->env);
-		// if (data_exec->pid == 0 && ft_check_buildin(table->cmd) == EXIT_FAILURE)
-		// 	ft_child(tb_lst, nbr_cmd, dict, &fd_tmp_read);
-		// if (data_exec->pid > 0)
-		// 	ft_parent(tb_lst, &fd_tmp_read, nbr_cmd, dict);
 		tb_lst = tb_lst->next;
 	}
-	// close(data_exec->fd_out);
-	// close(data_exec->fd_in);
+	// if (data_exec->fd_out != STDOUT_FILENO)
+	// 	close(data_exec->fd_out);
+	// if (data_exec->fd_in != STDIN_FILENO)
+	// 	close(data_exec->fd_in);
 	ft_waitpid(ms, tb_lst_cpy);
 	free(ms->pid);
 }

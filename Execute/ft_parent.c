@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 05:58:25 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 06:17:37 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 12:49:29 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void ft_parent_do_nothing(t_minishell *ms, t_list *tb_lst, int *fd_read)
 	table = (t_table *)(tb_lst->data);
 	exec_data = (t_data *)( &(table->exec_data));
 	// dprintf(2, "ft_parent_do_nothing\n");
-	*fd_read = dup(table->fd_pipe[0]); // another process can read from previos process
+	if (ms->nbr_cmd_all > 0)
+		*fd_read = dup(table->fd_pipe[0]); // another process can read from previos process
 	dprintf(2, "fd_tmp[%d] : %d\n", table->exec_data.i, *fd_read);
 	ft_close_pipe(ms, tb_lst);
 }

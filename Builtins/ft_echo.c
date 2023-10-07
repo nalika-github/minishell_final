@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 18:32:52 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/04 02:14:31 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 13:05:16 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void	ft_echo(char **cmd, int fd_out)
 
 	i = 1;
 	no_nl = 0;
+	dprintf(2, "cmd[0] : %s\n", cmd[0]);
+	dprintf(2, "cmd[1] : %s\n", cmd[1]);
+	dprintf(2, "fd_out : %d\n", fd_out);
 	if (cmd[1] == NULL)
 	{
 		ft_putstr_fd("\n", fd_out);
@@ -31,6 +34,7 @@ void	ft_echo(char **cmd, int fd_out)
 	}
 	while (cmd[i])
 	{
+		dprintf(2, "check1_ft_echo\n");
 		ft_putstr_fd(cmd[i], fd_out);
 		i++;
 		if (!cmd[i])
@@ -39,4 +43,7 @@ void	ft_echo(char **cmd, int fd_out)
 	}
 	if (no_nl == 0)
 		write(fd_out, "\n", 1);
+	// if (fd_out != STDOUT_FILENO)
+	// 	close (fd_out);
+	exit(0);
 }
