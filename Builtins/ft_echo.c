@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 18:32:52 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 13:05:16 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 17:29:28 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_echo(char **cmd, int fd_out)
 
 	i = 1;
 	no_nl = 0;
+	fd_out = 1;
 	dprintf(2, "cmd[0] : %s\n", cmd[0]);
 	dprintf(2, "cmd[1] : %s\n", cmd[1]);
 	dprintf(2, "fd_out : %d\n", fd_out);

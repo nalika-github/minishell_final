@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 00:33:50 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 06:12:45 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 22:08:21 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ int		ft_cntfile(t_rdr *file);
 int		ft_cntcmd(t_list *table_list);
 void	ft_countexec(t_list *tb_lst);
 
+int ft_checkpath(t_dict *dict);
+// void	ft_prtdict(t_dict	*dict);
+
+
 /*ft_check_name*/
 int	ft_checkfile(t_list *tb_lst);
 void ft_dup2(t_list *tb_lst, int *fd_tmp_read, int nbr_cmd);
@@ -71,8 +75,10 @@ void	ft_prterrexec(char *str, int errno, int mode);
 int	ft_findchar(char *s1, char s2);
 
 /*ft_heredoc*/
-int	ft_heredoc(t_list *table_list, int cnt_heredoc);
+// int	ft_heredoc(t_list *table_list, int cnt_heredoc);
+int	ft_main_heredoc(t_list *tb_lst);
 
+void	ft_heredoc(t_list *tb_lst);
 /*ft_unset*/
 // void	ft_unset(char **cmd, t_dict *dict);
 

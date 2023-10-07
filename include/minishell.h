@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 15:48:46 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 05:32:05 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 18:13:45 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ typedef struct s_data
 	int		nbr_cmd;
 	int		nbr_heredoc;
 
-	// int		fd_heredoc;
+	int		fd_heredoc;
+	char	*file;
 } t_data;
 
 typedef struct s_table

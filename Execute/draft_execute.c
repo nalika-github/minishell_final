@@ -6,14 +6,14 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 18:26:45 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/01 02:37:23 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 17:32:07 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /* left loop in case it many pipe (It have outfile?)*/
-void	ft_dup2(int i, int j, t_data *data)
+void ft_dup2(int i, int j, t_data *data)
 {
 	// printf("ft_dup2\n");
 	if (i == 0 && data->nbr_cmd == 1) // start with 1 cmd
@@ -36,7 +36,7 @@ void	ft_dup2(int i, int j, t_data *data)
 		dup2(data->fd_tmp_read, STDIN_FILENO);
 		dup2(data->fd_out, STDOUT_FILENO);
 	}
-	else //btw
+	else // btw
 	{
 		printf("btw cmd\n");
 		dup2(data->fd_tmp_read, STDIN_FILENO);
@@ -44,14 +44,14 @@ void	ft_dup2(int i, int j, t_data *data)
 	}
 }
 
-void	ft_execvecmd(char **cmd, char **path, char **tmp_env)
+void ft_execvecmd(char **cmd, char **path, char **tmp_env)
 {
-	int		i;
-	char	*path_exec;
+	int i;
+	char *path_exec;
 
 	i = 0;
 	if (!cmd)
-		return ;
+		return;
 	while (path[i])
 	{
 		path_exec = ft_strjoinextra(path[i], cmd[0], NONE);
@@ -66,8 +66,7 @@ void	ft_execvecmd(char **cmd, char **path, char **tmp_env)
 		ft_prterrexec(cmd[0], 1, ERR_CMD);
 }
 
-
-void	ft_execvepath(char **path, char **tmp_env)
+void ft_execvepath(char **path, char **tmp_env)
 {
 	// printf("Entry : execvepath\n");
 	if (access(path[0], F_OK | X_OK) == -1)
@@ -83,7 +82,7 @@ void	ft_execvepath(char **path, char **tmp_env)
 	}
 }
 
-void	ft_parent(t_data *data)
+void ft_parent(t_data *data)
 {
 	data->fd_tmp_read = dup(data->fd_pipe[0]); // another process can read from previos process
 	// printf("tmp_read : %d\n" , data->fd_tmp_read);
@@ -96,7 +95,7 @@ void	ft_parent(t_data *data)
 	// exit
 }
 
-void	ft_child(int i, t_data *data, int j)
+void ft_child(int i, t_data *data, int j)
 {
 	char **cmd;
 
@@ -111,23 +110,23 @@ void	ft_child(int i, t_data *data, int j)
 		ft_execvecmd(cmd, data->path, data->tmp_env);
 }
 
-void	ft_execute(t_minishell *ms, int ac, char **av)
+void ft_execute(t_minishell *ms, int ac, char **av)
 {
-	int		i;
-	int		j;
+	int i;
+	int j;
 
 	i = 0;
 	j = 2;
 	ms->data.nbr_cmd = ft_cntcmd(ms->tb_lst);
 	ms->data.pid = malloc(sizeof(pid_t) * ms->data.nbr_cmd);
 	if (!ms->data.pid)
-		return ;
+		return;
 	ft_getfd(ms);
 	i = 0;
-	printf("nbr_cmd : %d\n" ,ms->data.nbr_cmd);
-	while(i < ms->data.nbr_cmd)
+	printf("nbr_cmd : %d\n", ms->data.nbr_cmd);
+	while (i < ms->data.nbr_cmd)
 	{
-		if (pipe(ms->data.fd_pipe)== -1)
+		if (pipe(ms->data.fd_pipe) == -1)
 			ft_prterr(CANNT_PIPE);
 		ms->data.pid[i] = fork();
 		if (ms->data.pid[i] == -1)
@@ -140,11 +139,9 @@ void	ft_execute(t_minishell *ms, int ac, char **av)
 		j++;
 	}
 	int k = 0;
-	while(k < ms->data.nbr_cmd)
+	while (k < ms->data.nbr_cmd)
 	{
 		waitpid(ms->data.pid[k], NULL, 0);
 		k++;
 	}
 }
-
-

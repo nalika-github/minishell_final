@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:03:35 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/04 02:20:29 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 21:55:04 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,65 +75,68 @@ int	ft_cnt_repeat(char **str, t_dict *dict)
 }
 
 //str is arg that wanted to add at last arg from env
-t_dict_value	**ft_get_value(char **str, t_dict *dict)
-{
-	int	len;
-	t_dict_value **tmp;
-	char	**sp_2;
-	int	i;
-	int repeat;
+// t_dict_value	**ft_get_value(char **str, t_dict *dict)
+// {
+// 	int	len;
+// 	t_dict_value **tmp;
+// 	char	**sp_2;
+// 	int	i;
+// 	int repeat;
 
-	repeat = ft_cnt_repeat(str, dict);
-	i = 0;
-	len = ft_cntstr(str) - repeat  - 1;
-	tmp = malloc(sizeof(t_dict_value *) * (len + 1));
-	if (!tmp)
-		return (NULL);
-	int t = 0;
-	while (str[i])
-	{
-		tmp[i] = malloc(sizeof(t_dict_value ));
-		sp_2 = ft_split(str[i], '=');
-		if (sp_2 == NULL)
-			return (NULL);
-		if (ft_find_repeat(sp_2[0], dict) == EXIT_SUCCESS && sp_2[0]) // repeat value
-		{
-			ft_instead_value(sp_2, dict);
-			t = 1;
-		}
-		if (t == 0)
-		{
-			if (sp_2[0])
-				tmp[i]->key = ft_strdup(sp_2[0]);
-			else
-				tmp[i]->key = ft_strdup("");
-			if (sp_2[1])
-				tmp[i]->value = ft_strdup(sp_2[1]);
-			else
-				tmp[i]->value = NULL;
-			i++;
-		}
-		t = 0;
-		i++;
-		ft_dbfree(sp_2);
-	}
-	tmp[i] = NULL;
-	return (tmp);
-}
+// 	repeat = ft_cnt_repeat(str, dict);
+// 	i = 0;
+// 	len = ft_cntstr(str) - repeat  - 1;
+// 	tmp = malloc(sizeof(t_dict_value *) * (len + 1));
+// 	if (!tmp)
+// 		return (NULL);
+// 	int t = 0;
+// 	while (str[i])
+// 	{
+// 		tmp[i] = malloc(sizeof(t_dict_value ));
+// 		sp_2 = ft_split(str[i], '=');
+// 		if (sp_2 == NULL)
+// 			return (NULL);
+// 		if (ft_find_repeat(sp_2[0], dict) == EXIT_SUCCESS && sp_2[0]) // repeat value
+// 		{
+// 			ft_instead_value(sp_2, dict);
+// 			t = 1;
+// 		}
+// 		if (t == 0)
+// 		{
+// 			if (sp_2[0])
+// 				tmp[i]->key = ft_strdup(sp_2[0]);
+// 			else
+// 				tmp[i]->key = ft_strdup("");
+// 			if (sp_2[1])
+// 				tmp[i]->value = ft_strdup(sp_2[1]);
+// 			else
+// 				tmp[i]->value = NULL;
+// 			i++;
+// 		}
+// 		t = 0;
+// 		i++;
+// 		ft_dbfree(sp_2);
+// 	}
+// 	tmp[i] = NULL;
+// 	return (tmp);
+// }
 
 /*av instead value that it want to attach with last arg*/
 void	ft_addvalueexport(char **av, t_dict *dict)
 {
-	t_dict			*tmp_newdict=NULL;
-	t_dict_value	**tmp_value;
-	int				i;
+	int		i;
+	char	**sp;
+	t_dict	*new_dict;
 
-	i = 0;
-	tmp_value = ft_get_value(av, dict);
-	while (tmp_value[i])
+	i = 1;
+	while (av[i])
 	{
-		tmp_newdict = ft_lstnew_dict(tmp_value[i]);
-		ft_lstadd_back_dict(&dict, tmp_newdict);
+		sp = ft_split(av[i], '=');
+		new_dict = ft_lstnew_dict(malloc(sizeof(t_dict)));
+		new_dict->tmp_dict->key = ft_strdup(sp[0]);
+		new_dict->tmp_dict->value = ft_strdup(sp[1]);
+		ft_freesplite(sp);
+		ft_lstadd_back_dict(&dict, new_dict);
 		i++;
 	}
 }

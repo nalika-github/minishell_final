@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 05:58:25 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 12:49:29 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 22:09:04 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,43 @@ void ft_parent_do_nothing(t_minishell *ms, t_list *tb_lst, int *fd_read)
 	// dprintf(2, "ft_parent_do_nothing\n");
 	if (ms->nbr_cmd_all > 0)
 		*fd_read = dup(table->fd_pipe[0]); // another process can read from previos process
-	dprintf(2, "fd_tmp[%d] : %d\n", table->exec_data.i, *fd_read);
+	// dprintf(2, "fd_tmp[%d] : %d\n", table->exec_data.i, *fd_read);
 	ft_close_pipe(ms, tb_lst);
+}
+
+void	ft_parent_builtin(t_minishell *ms, t_list *tb_lst, int *fd_read)
+{
+	t_table	*table;
+
+	table = (t_table *)(tb_lst->data);
+	ft_getfd(tb_lst);
+	*fd_read = dup(table->fd_pipe[0]);
+	ft_close_pipe(ms, tb_lst);
+	if (table->exec_status == BUI_PARENT)
+	{
+		if (ft_strcmp(table->cmd[0], "cd") == 0)
+			ft_cd(table->cmd, ms->dict);
+		if ((ft_strcmp(table->cmd[0], "export") == 0) && table->cmd[1])
+			ft_export(table->cmd,  ms->dict);
+		if (ft_strcmp(table->cmd[0], "unset") == 0)
+			ft_unset(table->cmd, &ms->dict);
+		if (ft_strcmp(table->cmd[0], "env") == 0)
+			ft_env(ms->dict);
+		if (ft_strcmp(table->cmd[0], "exit") == 0)
+			ft_exit(table->cmd, ms->dict);
+	}
 }
 
 void branch_parent(t_minishell *ms, t_list *tb_lst, int *fd_read)
 {
-	// dprintf(2, "branch_parent\n");
-	// exit(0);
 	t_table *table;
 
 	table = (t_table *)(tb_lst->data);
-
-	// if (table->exec_status == BUI_PARENT)
-	// 	ft_parent_builtin(ms, tb_lst);
-	// else // table->exec_status == 1
-	// 	ft_parent_do_nothing(ms, tb_lst, fd_read);
-	ft_parent_do_nothing(ms, tb_lst, fd_read);
+	if (ft_checkpath(ms->dict) == 0)
+		ft_prterrexec(table->cmd[0], 127, ERR_PATH);
+	if (table->exec_status == BUI_PARENT)
+		ft_parent_builtin(ms, tb_lst, fd_read);
+	else // table->exec_status == 1
+		ft_parent_do_nothing(ms, tb_lst, fd_read);
+	ft_prtdict(ms->dict);
 }
