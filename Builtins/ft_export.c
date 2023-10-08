@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:48:06 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 21:14:46 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 01:38:18 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_checkname(char **cmd)
 
 
 //return t_dict for print env
-void	ft_export(char **cmd, t_dict *dict)
+void	ft_export(char **cmd, t_dict **dict)
 {
 	int	len;
 	t_dict *tmp_export=NULL;
@@ -87,8 +87,10 @@ void	ft_export(char **cmd, t_dict *dict)
 	ft_checkname(cmd); //check first character of variable(key)
 	len = ft_cntstr(cmd);
 	if (len == 1) // (export no arg)
-		ft_lstascend(dict);
+		ft_lstascend(*dict);
 		// ft_printvalue_ep(env);
 	if (len > 1) // (export with arg)
-		ft_addvalueexport(cmd, dict); // left assign value
+		ft_addvalueexport(cmd, *dict); // left assign value
+	// dprintf(2, "print_dict\n");
+	// ft_prtdict(*dict);
 }

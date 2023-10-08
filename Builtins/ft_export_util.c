@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 17:03:35 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 21:55:04 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 17:46:42 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,21 +122,93 @@ int	ft_cnt_repeat(char **str, t_dict *dict)
 // }
 
 /*av instead value that it want to attach with last arg*/
+
+int		key_scan(t_dict_value value, t_dict *dict)
+{
+	char	*key;
+	int		i;
+
+	i = 0;
+	while (dict)
+	{
+		key = dict->tmp_dict->key;
+		if (ft_strcmp(key, value.key) == 0)
+			return (i);
+		i++;
+		dict = dict->next;
+	}
+	return (-1);
+}
+
+t_dict	*pick_dict(t_dict *dict, int index)
+{
+	while(index > 0)
+	{
+		index--;
+		dict = dict->next;
+	}
+	return (dict);
+}
+void	add_dict_node(t_dict *dict, t_dict *node, t_dict_value value)
+{
+	node->tmp_dict->key = value.key;
+	if (value.value != NULL)
+		node->tmp_dict->value = value.value;
+	else
+		node->tmp_dict->value = NULL;
+	ft_lstadd_back_dict(&dict, node);
+}
+
+void	pick_value_n_slide(t_dict_value *value, char **str)
+{
+	size_t	i;
+
+	i = 0;
+	while((*str)[i] != '=' && (*str)[i])
+		i++;
+	value->key = ft_substr((*str), 0, i);
+	while(i > 0)
+	{
+		(*str)++;
+		i--;
+	}
+	if (*(*str) == '=')
+		(*str)++;
+	else
+	{
+		value->value = NULL;
+		return ;
+	}
+	while((*str)[i])
+		i++;
+	value->value = ft_substr((*str), 0, i + 1);
+}
+
 void	ft_addvalueexport(char **av, t_dict *dict)
 {
-	int		i;
-	char	**sp;
-	t_dict	*new_dict;
+	int				i;
+	int				index;
+	t_dict_value	value;
+	t_dict			*node;
+	char			*str;
 
 	i = 1;
 	while (av[i])
 	{
-		sp = ft_split(av[i], '=');
-		new_dict = ft_lstnew_dict(malloc(sizeof(t_dict)));
-		new_dict->tmp_dict->key = ft_strdup(sp[0]);
-		new_dict->tmp_dict->value = ft_strdup(sp[1]);
-		ft_freesplite(sp);
-		ft_lstadd_back_dict(&dict, new_dict);
+		str = av[i];
+		pick_value_n_slide(&value, &str);
+		index = key_scan(value, dict);
+		if (index == -1) //no arg
+			add_dict_node(dict, ft_lstnew_dict(malloc(sizeof(t_dict))), value);
+		else
+		{
+			if (value.value)
+			{
+				node = pick_dict(dict, index);
+				free(node->tmp_dict->value);
+				node->tmp_dict->value = value.value;
+			}
+		}
 		i++;
 	}
 }

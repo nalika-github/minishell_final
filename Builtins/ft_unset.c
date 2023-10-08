@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 18:33:14 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 18:04:28 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 01:34:46 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,9 @@ void	ft_unset(char **cmd, t_dict **dict)
 
 	i = 1;
 	dprintf(2, "ft_unset\n");
-	dprintf(2, "cmd[0] : %s\n" , cmd[0]);
-	dprintf(2, "cmd[0] : %s\n" , cmd[1]);
+	// dprintf(2, "cmd[0] : %s\n" , cmd[0]);
+	// dprintf(2, "cmd[0] : %s\n" , cmd[1]);
+	// exit(0);
 	while (cmd[i])
 	{
 		index = ft_findkey_export(cmd[i], *dict);

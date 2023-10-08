@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 17:25:43 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 04:50:52 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 17:52:52 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,12 @@ void	ft_prtexport(t_dict	*dict)
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		ft_putstr_fd(dict->tmp_dict->key, STDOUT_FILENO);
 		if (dict->tmp_dict->value)
+		{
 			ft_putstr_fd("=", STDOUT_FILENO);
-		ft_putstr_fd(dict->tmp_dict->value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+			ft_putstr_fd(dict->tmp_dict->value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+		}
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		dict = dict -> next;
 	}

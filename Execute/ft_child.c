@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 05:48:56 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 22:09:17 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 04:45:23 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void ft_child_execve(t_minishell *ms, t_list *tb_lst, int *fd_read)
 	if (ft_findchar(table->cmd[0], '/') == EXIT_SUCCESS) // cmd or av4
 		ft_execvepath(table->cmd, ms->env);
 	else
-	{
-		// dprintf(2, "ft_child_exve %d\n\n", table->exec_data.i);
 		ft_execvecmd(table->cmd, path, ms->env);
-	}
 }
 int ft_checkpath(t_dict *dict)
 {
@@ -67,18 +64,20 @@ void ft_child_builtin(t_minishell *ms, t_list *tb_lst, int *fd_read)
 	{
 		// dprintf(2, "ft_child_builtin\n");
 		if ((ft_strcmp(table->cmd[0], "export") == 0) && table->cmd[1] == NULL)
-			ft_export(table->cmd, ms->dict);
+			ft_export(table->cmd, &ms->dict);
 		if (ft_strcmp(table->cmd[0], "echo") == 0)
 			ft_echo(table->cmd, exec_data->fd_out);
 		if (ft_strcmp(table->cmd[0], "pwd") == 0)
 			ft_pwd();
-		// if (ft_strcmp(table->cmd[0], "env") == 0)
-		// 	ft_env(ms->dict);
+		if (ft_strcmp(table->cmd[0], "env") == 0)
+			ft_env(ms->dict);
 	}
 }
 void	ft_child_do_nothing(t_minishell *ms, t_list *tb_lst)
 {
+	// dprintf(2, "ft_child_do_nothing\n");
 	ft_close_pipe(ms, tb_lst);
+	// exit (0);
 }
 
 void branch_child(t_minishell *ms, t_list *tb_lst, int *fd_read)
@@ -90,6 +89,7 @@ void branch_child(t_minishell *ms, t_list *tb_lst, int *fd_read)
 
 	table = (t_table *)(tb_lst->data);
 	// exec_data = (t_data *)(&(table->exec_data));
+	// dprintf(2 ,"b")
 	if (ft_checkpath(ms->dict) == 0)
 		ft_prterrexec(table->cmd[0], 127, ERR_PATH);
 	if (table->exec_status == CMD_)
@@ -98,4 +98,5 @@ void branch_child(t_minishell *ms, t_list *tb_lst, int *fd_read)
 		ft_child_builtin(ms, tb_lst, fd_read);
 	else
 		ft_child_do_nothing(ms, tb_lst);
+	exit(0); // for execve heredoc
 }

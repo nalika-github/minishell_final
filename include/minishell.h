@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 15:48:46 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 18:13:45 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 19:44:53 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h> //open
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 
 # include "builtins.h"
@@ -139,7 +142,7 @@ typedef struct s_data
 	int		nbr_heredoc;
 
 	int		fd_heredoc;
-	char	*file;
+	char	*filename;
 } t_data;
 
 typedef struct s_table
@@ -164,8 +167,8 @@ typedef struct	s_minishell
 	int		err_code;
 	int		exit_code;
 	int		nbr_cmd_all;
-	// int		nbr_heredoc;
 	char	**env;
+	int		status;
 	struct sigaction	sigint;
 	struct sigaction	sigquit;
 }				t_minishell;

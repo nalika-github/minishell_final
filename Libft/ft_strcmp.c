@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:26:46 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/09/03 16:07:50 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/07 23:49:33 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 
 }
-
+// #include <string.h>
 // int	main(int ac, char **av)
 // {
 // 	(void)ac;

@@ -6,7 +6,7 @@
 #    By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/10 16:21:02 by nkietwee          #+#    #+#              #
-#    Updated: 2023/10/07 05:59:33 by nkietwee         ###   ########.fr        #
+#    Updated: 2023/10/08 20:19:00 by nkietwee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,11 @@ LIBFT_PATH = Libft/
 LIBFTMINISHELL_PATH = libminishell/
 PARSER_PATH = parser/
 
+# /usr/local/Cellar/readline/8.2.1/
+
 # MINISHELL_SRCS = ft_minishell.c
-OPENDIR				=	-L./usr/include/readline -L./libft -L./libminishell
+OPENDIR				=	-L/usr/local/Cellar/readline/8.2.1/lib -L./libft -L./libminishell -L/usr/local/lib
+OPENINC				=	-I/usr/local/Cellar/readline/8.2.1/include/readline -I/usr/local/include
 LIBLINK				=	-lreadline
 
 BUILTINS_SRCS = ft_cnt_builtins.c\
@@ -98,10 +101,10 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 %o:%c $(INC)
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) $(LIBLINK) $(OPENDIR) $(OPENINC) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(FLAGS) -L/usr/local/lib -I/usr/local/include -lreadline $(OBJS) -o $(NAME)
+	$(CC) $(FLAGS) $(LIBLINK) $(OPENDIR) $(OPENINC) $(OBJS) -o $(NAME)
 
 # $(CC) $(FLAGS) -L/usr/local/lib -L./usr/include -I/usr/local/include  $(OBJS) -o $(NAME) -lreadline
 

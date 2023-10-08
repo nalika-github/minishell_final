@@ -77,7 +77,7 @@ static void	print_token(t_minishell ms)
 // 	}
 // }
 
-/* void	sig_handler(int signum)
+void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -86,7 +86,7 @@ static void	print_token(t_minishell ms)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-} */
+}
 
 static void	init_minishell(t_minishell	*ms, int *ac, char ***av, char ***env)
 {
@@ -103,14 +103,14 @@ static void	init_minishell(t_minishell	*ms, int *ac, char ***av, char ***env)
 	ms->exit_code = 0;
 	ms->env = *env;
 
-	// ms->sigint.sa_handler = sig_handler;
-	// sigemptyset(&ms->sigint.sa_mask);
-	// ms->sigint.sa_flags = SA_RESTART;
-	// sigaction(SIGINT, &ms->sigint, NULL);
-	// ms->sigquit.sa_handler = SIG_IGN;
-	// sigemptyset(&ms->sigquit.sa_mask);
-	// ms->sigquit.sa_flags = SA_RESTART;
-	// sigaction(SIGQUIT, &ms->sigquit, NULL);
+	ms->sigint.sa_handler = sig_handler;
+	sigemptyset(&ms->sigint.sa_mask);
+	ms->sigint.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &ms->sigint, NULL);
+	ms->sigquit.sa_handler = SIG_IGN;
+	sigemptyset(&ms->sigquit.sa_mask);
+	ms->sigquit.sa_flags = SA_RESTART;
+	sigaction(SIGQUIT, &ms->sigquit, NULL);
 }
 
 void clear_tb_n_tk(t_minishell *ms)

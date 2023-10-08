@@ -6,7 +6,7 @@
 /*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 02:36:27 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/07 20:32:49 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 18:18:19 by nkietwee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,128 +59,134 @@ void	ft_prt_heredoc(t_list *tb_list)
 	}
 }
 
-// int	ft_do_here(t_list *rdr_lst, int nbr_heredoc, char *file)
-// {
-// 	t_table *table;
-// 	// t_list	*rdr_lst;
-// 	t_rdr	*rdr;
-// 	char	*tmp;
-// 	int		fd_heredoc;
-// 	int		i;
-
-// 	i = 0;
-// 	// ft_prt_heredoc(tb_lst);
-// 	fd_heredoc = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-// 	if (fd_heredoc == -1)
-// 		return (-1);
-// 	while (rdr_lst)
-// 	{
-// 		rdr = (t_rdr *)(rdr_lst->data);
-// 		if (rdr->type == HEREDOC)
-// 		{
-// 			rdr->file = ft_strjoinextra(rdr->file, "\n", NONE);
-// 			while (rdr->type == HEREDOC)
-// 			{
-// 				write(STDOUT_FILENO, "> ", 2);
-// 				tmp = get_next_line(STDIN_FILENO);
-// 				if (ft_strcmp(tmp, rdr->file) == EXIT_SUCCESS)
-// 				{
-// 					i++;
-// 					break;
-// 				}
-// 				if (i == nbr_heredoc - 1)
-// 					write(fd_heredoc, tmp, ft_strlen(tmp));
-// 			}
-// 		}
-// 		rdr_lst = rdr_lst->next;
-// 		// dprintf(2, "lst : %s\n", ((t_rdr *)(rdr_lst->data))->file );
-// 	}
-// 	close (fd_heredoc);
-// 	fd_heredoc = open(file, O_RDONLY , 0644);
-// 	// exit(0);
-// 	return (fd_heredoc);
-// }
-
-// char	*ft_createfile(int round)
-// {
-// 	int fd;
-// 	char *file;
-
-// 	char *str = ft_itoa(round);
-// 	// dprintf(2, "str : %s\n" ,str);
-// 	file = ft_strjoin("../tmpfile_", str);
-// 	free (str);
-// 	return(file);
-// }
-
-// int	ft_main_heredoc(t_list *tb_lst)
-// {
-// 	t_table *table;
-// 	t_data	*exec_data;
-// 	int		round;
-// 	char	*file;
-
-// 	round = 0;
-// 	while (tb_lst)
-// 	{
-// 		table = (t_table *)(tb_lst->data);
-// 		exec_data = (t_data *)(&(table->exec_data));
-// 		exec_data->nbr_heredoc = ft_cnt_heredoc(tb_lst);
-// 		exec_data->file = ft_createfile(round);
-// 		dprintf(2, "nbr_heredoc : %d\n", exec_data->nbr_heredoc);
-// 		dprintf(2, "file : %s\n", exec_data->file);
-// 		exec_data->fd_heredoc = ft_do_here(table->rdr, exec_data->nbr_heredoc, file);
-// 		dprintf(2, "fd_heredoc_main[%d] : %d\n", round, exec_data->fd_heredoc);
-// 		// free(exec_data->file);
-// 		round++;
-// 		tb_lst = tb_lst->next;
-// 	}
-// 	dprintf(2, "End\n");
-// 	return (0);
-// }
-
-
-void	ft_heredoc(t_list *tb_lst)
+int	ft_do_here(t_list *rdr_lst, int nbr_heredoc, char *file)
 {
 	t_table *table;
-	t_list	*rdr_lst;
 	t_rdr	*rdr;
 	char	*tmp;
+	int		fd_heredoc;
+	int		i;
 
+	i = 0;
+	// ft_prt_heredoc(tb_lst);
+	// dprintf(2, "fd_here : %d\n", fd_heredoc);
+	// if (fd_heredoc == -1)
+	// 	return (-1);
+	while (rdr_lst)
+	{
+		rdr = (t_rdr *)(rdr_lst->data);
+		if (rdr->type == HEREDOC)
+		{
+			rdr->file = ft_strjoinextra(rdr->file, "\n", NONE);
+			fd_heredoc = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			// dprintf(2, "fd_heredoc [%s] : %d\n" ,file, fd_heredoc);
+			while (1)
+			{
+				write(STDOUT_FILENO, "> ", 2);
+				tmp = get_next_line(STDIN_FILENO);
+			// 	// dprintf(2, "tmp : %s", tmp);
+			// 	// dprintf(2, "deli : %s", rdr->file);
+				if (ft_strcmp(tmp, rdr->file) == EXIT_SUCCESS)
+				{
+					i++;
+					break;
+				}
+				if (i == nbr_heredoc - 1)
+					write(fd_heredoc, tmp, ft_strlen(tmp));
+				if (tmp)
+					free(tmp);
+			// 	tmp = get_next_line(STDIN_FILENO);
+			}
+			// close(table->exec_data.fd_heredoc);
+		}
+		rdr_lst = rdr_lst->next;
+	}
+	close (fd_heredoc);
+	fd_heredoc = open(file, O_RDONLY , 0644);
+	return (fd_heredoc);
+}
+
+char	*ft_createfile(int round)
+{
+	int fd;
+	char *file;
+
+	char *str = ft_itoa(round);
+	// dprintf(2, "str : %s\n" ,str);
+	file = ft_strjoin("../tmpfile_", str);
+	free (str);
+	return(file);
+}
+
+int	ft_main_heredoc(t_list *tb_lst)
+{
+	t_table *table;
+	t_data	*exec_data;
+	int		round;
+	char	*file;
+
+	round = 0;
 	while (tb_lst)
 	{
 		table = (t_table *)(tb_lst->data);
-		rdr_lst = table->rdr;
-		while (rdr_lst)
-		{
-			rdr = (t_rdr *)(rdr_lst->data);
-			if (rdr->type == HEREDOC)
-			{
-				rdr->file = ft_strjoinextra(rdr->file, "\n", NONE);
-				table->fd_heredoc = open(rdr->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
-				dprintf(2, "rdr->file : %s\n" , rdr->file);
-				write(STDOUT_FILENO, "> ", 2);
-				tmp = get_next_line(STDIN_FILENO);
-				while (tmp)
-				{
-					if (ft_strcmp(tmp, rdr->file) == EXIT_SUCCESS)
-						break;
-					write(table->fd_heredoc, tmp, ft_strlen(tmp));
-					if (tmp)
-						free(tmp);
-					write(STDOUT_FILENO, "> ", 2);
-					tmp = get_next_line(STDIN_FILENO);
-				}
-				close (table->fd_heredoc);
-				dprintf(2,"r->file = %s t->fd_heredoc = %d\n", rdr->file, table->fd_heredoc);
-			}
-			rdr_lst = rdr_lst->next;
-			// dprintf(2, "lst : %s\n", ((t_rdr *)(rdr_lst->data))->file );
-		}
-		dprintf(2,"table->fd_heredoc = %d\n", table->fd_heredoc);
+		exec_data = (t_data *)(&(table->exec_data));
+		exec_data->nbr_heredoc = ft_cnt_heredoc(tb_lst);
+		exec_data->filename = ft_createfile(round);
+		// dprintf(2, "nbr_heredoc : %d\n", exec_data->nbr_heredoc);
+		// dprintf(2, "file : %s\n", exec_data->filename);
+		exec_data->fd_heredoc = ft_do_here(table->rdr, exec_data->nbr_heredoc, exec_data->filename);
+		// dprintf(2, "fd_heredoc_main[%d] : %d\n", round, exec_data->fd_heredoc);
+		// free(exec_data->filename);
+		round++;
 		tb_lst = tb_lst->next;
 	}
+	// dprintf(2, "End\n");
+	// dprintf(2, "heredoc\n");
+	return (0);
 }
+
+
+// void	ft_heredoc(t_list *tb_lst)
+// {
+// 	t_table *table;
+// 	t_list	*rdr_lst;
+// 	t_rdr	*rdr;
+// 	char	*tmp;
+
+// 	while (tb_lst)
+// 	{
+// 		table = (t_table *)(tb_lst->data);
+// 		rdr_lst = table->rdr;
+// 		while (rdr_lst)
+// 		{
+// 			rdr = (t_rdr *)(rdr_lst->data);
+// 			if (rdr->type == HEREDOC)
+// 			{
+// 				rdr->file = ft_strjoinextra(rdr->file, "\n", NONE);
+// 				table->fd_heredoc = open(rdr->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+// 				dprintf(2, "rdr->file : %s\n" , rdr->file);
+// 				write(STDOUT_FILENO, "> ", 2);
+// 				tmp = get_next_line(STDIN_FILENO);
+// 				while (tmp)
+// 				{
+// 					if (ft_strcmp(tmp, rdr->file) == EXIT_SUCCESS)
+// 						break;
+// 					write(table->fd_heredoc, tmp, ft_strlen(tmp));
+// 					if (tmp)
+// 						free(tmp);
+// 					write(STDOUT_FILENO, "> ", 2);
+// 					tmp = get_next_line(STDIN_FILENO);
+// 				}
+// 				close (table->fd_heredoc);
+// 				dprintf(2,"r->file = %s t->fd_heredoc = %d\n", rdr->file, table->fd_heredoc);
+// 			}
+// 			rdr_lst = rdr_lst->next;
+// 			// dprintf(2, "lst : %s\n", ((t_rdr *)(rdr_lst->data))->file );
+// 		}
+// 		dprintf(2,"table->fd_heredoc = %d\n", table->fd_heredoc);
+// 		tb_lst = tb_lst->next;
+// 	}
+// }
 
 // int	ft_heredoc(t_list *tb_lst, int nbr_heredoc)
 // {
