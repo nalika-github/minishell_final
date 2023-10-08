@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+         #
+#    By: ptungbun <ptungbun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/10 16:21:02 by nkietwee          #+#    #+#              #
-#    Updated: 2023/10/08 20:19:00 by nkietwee         ###   ########.fr        #
+#    Updated: 2023/10/08 21:05:33 by ptungbun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,15 @@ NAME = minishell
 CC = cc
 
 # FLAGS = -Wall -Wextra -Werror
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+#FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -g -fsanitize=address
+#
+#
+# MUST INCLUDE Werror
+#
+#
 
 RM = rm -f
-
-INC = minishell.h
 
 BUILTINS_PATH = Builtins/
 EXECUTE_PATH = Execute/
@@ -31,9 +35,9 @@ PARSER_PATH = parser/
 # /usr/local/Cellar/readline/8.2.1/
 
 # MINISHELL_SRCS = ft_minishell.c
-OPENDIR				=	-L/usr/local/Cellar/readline/8.2.1/lib -L./libft -L./libminishell -L/usr/local/lib
+OPENDIR				=	-L/usr/local/Cellar/readline/8.2.1/lib/ -L./libft -L./libminishell -L/usr/local/lib
 OPENINC				=	-I/usr/local/Cellar/readline/8.2.1/include/readline -I/usr/local/include
-LIBLINK				=	-lreadline
+LIBLINK				=	-lreadline -D READLINE_LIBRARY=1
 
 BUILTINS_SRCS = ft_cnt_builtins.c\
 				ft_getenv.c\
@@ -100,8 +104,8 @@ OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-%o:%c $(INC)
-	$(CC) $(FLAGS) $(LIBLINK) $(OPENDIR) $(OPENINC) -c $< -o $@
+%.o: %.c
+	$(CC) $(FLAGS) -D READLINE_LIBRARY=1 -c $< -o $@
 
 $(NAME): $(OBJS)
 	$(CC) $(FLAGS) $(LIBLINK) $(OPENDIR) $(OPENINC) $(OBJS) -o $(NAME)

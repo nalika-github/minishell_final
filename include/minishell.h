@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkietwee <nkietwee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ptungbun <ptungbun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 15:48:46 by nkietwee          #+#    #+#             */
-/*   Updated: 2023/10/08 19:44:53 by nkietwee         ###   ########.fr       */
+/*   Updated: 2023/10/08 21:04:00 by ptungbun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <fcntl.h> //open
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include "/usr/local/Cellar/readline/8.2.1/include/readline/readline.h"
+# include "/usr/local/Cellar/readline/8.2.1/include/readline/history.h"
 # include <signal.h>
 
 
